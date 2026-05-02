@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark David & The Mighty Quinn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;600&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #f4f1e8;
+            --coal: #1a1a1a;
+            --rust: #b8452e;
+            --gold: #d4a574;
+            --steel: #6b7280;
+            --neon-blue: #00d4ff;
+            --neon-red: #ff3366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: var(--coal);
+            color: var(--cream);
+            overflow-x: hidden;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: 1000;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            z-index: 1;
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.1) 2px,
+                    rgba(0, 0, 0, 0.1) 4px
+                );
+            opacity: 0.3;
+        }
+
+        .train-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            opacity: 0.15;
+            filter: grayscale(100%) contrast(1.2);
+        }
+
+        .train-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            max-width: 1200px;
+            padding: 2rem;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        .marquee-sign {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto 1rem;
+            animation: neonFlicker 3s infinite alternate, float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+        }
+
+        .band-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(1.5rem, 5vw, 3.5rem);
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            margin: 0.75rem 0 0.5rem;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--gold) 50%, var(--cream) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 10px rgba(212, 165, 116, 0.3);
+            animation: fadeInUp 1.5s ease-out 0.3s backwards;
+        }
+
+        .tagline {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(0.8rem, 1.8vw, 1rem);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            animation: fadeInUp 1.5s ease-out 0.6s backwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: var(--rust);
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border: 2px solid var(--rust);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1.5s ease-out 0.9s backwards;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--cream);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover::before {
+            left: 0;
+        }
+
+        .cta-button:hover {
+            color: var(--coal);
+            border-color: var(--cream);
+        }
+
+        /* About Section */
+        .about {
+            position: relative;
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--coal) 0%, #2a2a2a 50%, var(--coal) 100%);
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image-stack {
+            position: relative;
+            height: 600px;
+        }
+
+        .about-img {
+            position: absolute;
+            width: 400px;
+            height: 350px;
+            object-fit: cover;
+            border: 4px solid var(--gold);
+            box-shadow: 12px 12px 0 rgba(184, 69, 46, 0.3);
+            filter: grayscale(20%) contrast(1.1);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .about-img:nth-child(1) {
+            top: 0;
+            left: 0;
+            z-index: 2;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .about-img:nth-child(2) {
+            bottom: 0;
+            right: 0;
+            z-index: 3;
+            animation: slideInRight 1s ease-out 0.3s backwards;
+        }
+
+        .about-img:hover {
+            transform: scale(1.05) rotate(1deg);
+            box-shadow: 16px 16px 0 rgba(184, 69, 46, 0.5);
+            z-index: 4;
+        }
+
+        .about-content {
+            animation: fadeInUp 1s ease-out 0.5s backwards;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            color: var(--cream);
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60%;
+            height: 3px;
+            background: var(--rust);
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--cream);
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .highlight {
+            color: var(--gold);
+            font-weight: 400;
+        }
+
+        /* Gallery Section */
+        .gallery {
+            padding: 8rem 2rem;
+            background: var(--coal);
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .gallery-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            border: 3px solid var(--steel);
+            transition: all 0.4s ease;
+            animation: fadeIn 0.8s ease-out backwards;
+        }
+
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(30%) contrast(1.05);
+            transition: all 0.4s ease;
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(184, 69, 46, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .gallery-item:hover {
+            border-color: var(--rust);
+            transform: scale(1.03);
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+
+        .gallery-item:hover img {
+            filter: grayscale(0%) contrast(1.1);
+            transform: scale(1.1);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--coal) 0%, #1a1a1a 100%);
+            text-align: center;
+        }
+
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .contact-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--gold);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .social-link {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--gold);
+            color: var(--coal);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(212, 165, 116, 0.3);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '↓';
+            font-size: 2rem;
+            color: var(--gold);
+            opacity: 0.7;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes neonFlicker {
+            0%, 100% {
+                filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.5));
+            }
+            50% {
+                filter: drop-shadow(0 0 50px rgba(255, 51, 102, 0.6));
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .about-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .about-image-stack {
+                height: 400px;
+                margin: 0 auto;
+            }
+
+            .about-img {
+                width: 300px;
+                height: 250px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                padding: 4rem 0;
+            }
+
+            .marquee-sign {
+                max-width: 90%;
+                margin-bottom: 2rem;
+            }
+
+            .about-image-stack {
+                height: 350px;
+            }
+
+            .about-img {
+                width: 250px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="train-wrapper">
+            <img src="train.jpg" alt="The Mark David Express" class="train-img">
+        </div>
+        <div class="hero-content">
+            <img src="neon-sign.png" alt="Mark David & The Mighty Quinn" class="marquee-sign">
+            <h1 class="band-name">Mark David & the Mighty Quinn</h1>
+            <p class="tagline">Acoustic Guitar • Drums • Vocals • Pure Live Music</p>
+            <a href="#contact" class="cta-button">Book Us</a>
+        </div>
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="about-container">
+            <div class="about-image-stack">
+                <img src="duo-bw.jpg" alt="Mark David & The Mighty Quinn performing" class="about-img">
+                <img src="duo-indoor.jpg" alt="The duo in action" class="about-img">
+            </div>
+            <div class="about-content">
+                <h2 class="section-title">About The Duo</h2>
+                <p class="about-text">
+                    Hailing from <span class="highlight">'The Northern Rivers' NSW</span>, Mark David & The Mighty Quinn are accomplished musicians in their own right, teaming up on Acoustic Guitar, Drums & Vocals.
+                </p>
+                <p class="about-text">
+                    They create a fun & dynamic duo covering music from <span class="highlight">the Delta Blues to Dylan, Neil Young, Hendrix, Oz Rock & current classics</span> guaranteeing a fun evening of live music.
+                </p>
+                <p class="about-text">
+                    The Duo is versatile at being able to play the appropriate music for all settings. Their wealth of experience shows in their performances & their ability to connect to an audience.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery">
+        <div class="gallery-header">
+            <h2 class="section-title">Live In Action</h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="performance-1.jpg" alt="Performance 1">
+            </div>
+            <div class="gallery-item">
+                <img src="performance-2.jpg" alt="Performance 2">
+            </div>
+            <div class="gallery-item">
+                <img src="performance-3.jpg" alt="Performance 3">
+            </div>
+            <div class="gallery-item">
+                <img src="performance-4.jpg" alt="Performance 4">
+            </div>
+            <div class="gallery-item">
+                <img src="performance-5.jpg" alt="Performance 5">
+            </div>
+            <div class="gallery-item">
+                <img src="performance-6.jpg" alt="Performance 6">
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="contact-content">
+            <h2 class="contact-title">Let's Make Music</h2>
+            <p class="contact-text">
+                Ready to bring authentic, energetic live music to your venue or event? We'd love to hear from you.
+            </p>
+            <div class="social-links">
+                <a href="mailto:markdavidthesunking@gmail.com" class="social-link">Email Us</a>
+                <a href="https://rumble.com/v76swz2-mark-david-and-the-mighty-quinn-compilation.html" target="_blank" class="social-link">Video</a>
+            </div>
+        </div>
+    </section>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Smooth scroll for CTA button
+        document.querySelector('.cta-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('#contact').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+        // Parallax effect for hero background
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const train = document.querySelector('.train-wrapper');
+            if (train) {
+                train.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Intersection Observer for animation triggers
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Observe gall
